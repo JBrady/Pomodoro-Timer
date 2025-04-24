@@ -25,7 +25,12 @@ export default function Home() {
         </div>
       </header>
       <main className="container mx-auto p-4 flex-grow grid grid-cols-1 md:grid-cols-2 gap-4">
-        <Timer initialMinutes={workDuration} />
+        <Timer
+          initialMinutes={workDuration}
+          shortBreak={shortBreak}
+          longBreak={longBreak}
+          autoStart={autoStart}
+        />
         <TaskList />
         <Settings
           workDuration={workDuration}
