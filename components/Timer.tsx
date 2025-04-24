@@ -91,7 +91,7 @@ const Timer: React.FC<TimerProps> = ({
   const strokeDashoffset = circumference * (1 - timeLeft / totalSeconds);
 
   return (
-    <div className="timer">
+    <div className="timer p-4 bg-white rounded shadow">
       <h2 className="text-2xl font-bold">
         {phase === 'work'
           ? 'Work'
@@ -99,7 +99,7 @@ const Timer: React.FC<TimerProps> = ({
           ? 'Short Break'
           : 'Long Break'}
       </h2>
-      <div className="relative w-32 h-32 mx-auto mt-4">
+      <div className="relative w-32 h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 mx-auto mt-4">
         <svg className="-rotate-90" width="100%" height="100%" viewBox="0 0 120 120">
           <circle className="stroke-current text-gray-300" strokeWidth={8} fill="transparent" r={radius} cx={60} cy={60} />
           <circle className="stroke-current text-green-500" strokeWidth={8} fill="transparent" r={radius} cx={60} cy={60} strokeDasharray={circumference} strokeDashoffset={strokeDashoffset} />

@@ -1,14 +1,23 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 interface Task { id: string; text: string; completed: boolean; }
 
 const TaskList: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
+  // Load tasks from localStorage on mount
+  useEffect(() => {
+    const saved = localStorage.getItem('tasks');
+    if (saved) setTasks(JSON.parse(saved));
+  }, []);
   const [newTaskText, setNewTaskText] = useState('');
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editingText, setEditingText] = useState('');
+  // Persist tasks to localStorage when tasks change
+  useEffect(() => {
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+  }, [tasks]);
 
   const addTask = () => {
     if (!newTaskText.trim()) return;

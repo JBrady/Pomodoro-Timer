@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Timer from '../../components/Timer';
 import TaskList from '../../components/TaskList';
 import Settings from '../../components/Settings';
@@ -9,6 +9,24 @@ export default function Home() {
   const [shortBreak, setShortBreak] = useState(5);
   const [longBreak, setLongBreak] = useState(15);
   const [autoStart, setAutoStart] = useState(false);
+
+  // Load settings on mount
+  useEffect(() => {
+    const w = localStorage.getItem('workDuration');
+    if (w) setWorkDuration(Number(w));
+    const s = localStorage.getItem('shortBreak');
+    if (s) setShortBreak(Number(s));
+    const l = localStorage.getItem('longBreak');
+    if (l) setLongBreak(Number(l));
+    const a = localStorage.getItem('autoStart');
+    if (a) setAutoStart(a === 'true');
+  }, []);
+
+  // Persist settings
+  useEffect(() => { localStorage.setItem('workDuration', workDuration.toString()); }, [workDuration]);
+  useEffect(() => { localStorage.setItem('shortBreak', shortBreak.toString()); }, [shortBreak]);
+  useEffect(() => { localStorage.setItem('longBreak', longBreak.toString()); }, [longBreak]);
+  useEffect(() => { localStorage.setItem('autoStart', autoStart.toString()); }, [autoStart]);
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -24,7 +42,7 @@ export default function Home() {
           </nav>
         </div>
       </header>
-      <main className="container mx-auto p-4 flex-grow grid grid-cols-1 md:grid-cols-2 gap-4">
+      <main className="container mx-auto p-4 flex-grow grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <Timer
           initialMinutes={workDuration}
           shortBreak={shortBreak}

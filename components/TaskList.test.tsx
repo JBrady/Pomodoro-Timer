@@ -3,6 +3,8 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import TaskList from './TaskList';
 
 describe('TaskList Component', () => {
+  beforeEach(() => { localStorage.clear(); });
+
   it('adds a new task when Add is clicked', () => {
     render(<TaskList />);
     const input = screen.getByPlaceholderText('New task');
