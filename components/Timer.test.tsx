@@ -50,6 +50,7 @@ describe('Timer Component', () => {
       destination: {},
       close: jest.fn(),
     };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     window.AudioContext = jest.fn(() => mockCtx as any);
     window.webkitAudioContext = window.AudioContext;
     const onAudioCue = jest.fn();

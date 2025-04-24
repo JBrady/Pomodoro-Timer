@@ -55,6 +55,7 @@ const Timer: React.FC<TimerProps> = ({
     setTimeLeft(initialMinutes * 60);
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (timeLeft === 0) {
       playSound();
