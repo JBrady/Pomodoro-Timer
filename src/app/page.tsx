@@ -9,6 +9,7 @@ export default function Home() {
   const [shortBreak, setShortBreak] = useState(5);
   const [longBreak, setLongBreak] = useState(15);
   const [autoStart, setAutoStart] = useState(false);
+  const [highContrast, setHighContrast] = useState(false);
 
   // Load settings on mount
   useEffect(() => {
@@ -20,6 +21,8 @@ export default function Home() {
     if (l) setLongBreak(Number(l));
     const a = localStorage.getItem('autoStart');
     if (a) setAutoStart(a === 'true');
+    const hc = localStorage.getItem('highContrast');
+    if (hc) setHighContrast(hc === 'true');
   }, []);
 
   // Persist settings
@@ -27,6 +30,7 @@ export default function Home() {
   useEffect(() => { localStorage.setItem('shortBreak', shortBreak.toString()); }, [shortBreak]);
   useEffect(() => { localStorage.setItem('longBreak', longBreak.toString()); }, [longBreak]);
   useEffect(() => { localStorage.setItem('autoStart', autoStart.toString()); }, [autoStart]);
+  useEffect(() => { localStorage.setItem('highContrast', highContrast.toString()); }, [highContrast]);
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -48,8 +52,9 @@ export default function Home() {
           shortBreak={shortBreak}
           longBreak={longBreak}
           autoStart={autoStart}
+          highContrast={highContrast}
         />
-        <TaskList />
+        <TaskList highContrast={highContrast} />
         <Settings
           workDuration={workDuration}
           setWorkDuration={setWorkDuration}
@@ -59,6 +64,8 @@ export default function Home() {
           setLongBreak={setLongBreak}
           autoStart={autoStart}
           setAutoStart={setAutoStart}
+          highContrast={highContrast}
+          setHighContrast={setHighContrast}
         />
       </main>
       <footer className="bg-gray-100">

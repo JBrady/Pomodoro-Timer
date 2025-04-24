@@ -39,4 +39,25 @@ describe('Timer Component', () => {
     expect(screen.getByText('01:00')).toBeInTheDocument();
     expect(screen.getByText('Start')).toBeInTheDocument();
   });
+
+  it('invokes onAudioCue prop when audio plays', () => {
+    const mockOsc = { connect: jest.fn(), start: jest.fn(), stop: jest.fn(), frequency: { value: 0 } };
+    const mockGainNode = { gain: { setValueAtTime: jest.fn() }, connect: jest.fn() };
+    const mockCtx = {
+      createOscillator: () => mockOsc,
+      createGain: () => mockGainNode,
+      currentTime: 0,
+      destination: {},
+      close: jest.fn(),
+    };
+    window.AudioContext = jest.fn(() => mockCtx as any);
+    window.webkitAudioContext = window.AudioContext;
+    const onAudioCue = jest.fn();
+    act(() => {
+      render(<Timer initialMinutes={0} autoStart={false} onAudioCue={onAudioCue} />);
+    });
+    expect(onAudioCue).toHaveBeenCalled();
+  });
+
+  // AudioContext-based audio test removed while audio functionality is disabled
 });

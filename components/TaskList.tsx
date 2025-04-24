@@ -3,8 +3,9 @@
 import React, { useState, useEffect } from 'react';
 
 interface Task { id: string; text: string; completed: boolean; }
+interface TaskListProps { highContrast?: boolean; }
 
-const TaskList: React.FC = () => {
+const TaskList: React.FC<TaskListProps> = ({ highContrast = false }) => {
   const [tasks, setTasks] = useState<Task[]>([]);
   // Load tasks from localStorage on mount
   useEffect(() => {
@@ -51,17 +52,19 @@ const TaskList: React.FC = () => {
   };
 
   return (
-    <div className="task-list">
+    <div className={`task-list p-4 border rounded ${highContrast ? 'bg-black text-white' : 'bg-white text-black'}`}>
       <h2 className="text-2xl font-bold mb-2">Tasks</h2>
       <div className="flex mb-4">
         <input
           type="text"
           value={newTaskText}
           onChange={e => setNewTaskText(e.target.value)}
+          onKeyDown={e => e.key === 'Enter' && addTask()}
           className="flex-1 border rounded px-2 py-1 mr-2"
           placeholder="New task"
+          aria-label="New task"
         />
-        <button onClick={addTask} className="px-4 py-1 bg-blue-500 text-white rounded">Add</button>
+        <button onClick={addTask} className="px-4 py-1 bg-blue-500 text-white rounded" aria-label="Add new task">Add</button>
       </div>
       <ul>
         {tasks.map(task => (
@@ -71,12 +74,15 @@ const TaskList: React.FC = () => {
                 type="checkbox"
                 checked={task.completed}
                 onChange={() => toggleComplete(task.id)}
+                aria-label={`Mark task ${task.text} as ${task.completed ? 'incomplete' : 'complete'}`}
               />
               {editingId === task.id ? (
                 <input
                   className="border rounded px-1 py-0.5"
                   value={editingText}
                   onChange={e => setEditingText(e.target.value)}
+                  onKeyDown={e => e.key === 'Enter' && saveEdit(task.id)}
+                  aria-label="Edit task"
                 />
               ) : (
                 <span className={task.completed ? 'line-through text-gray-500' : ''}>{task.text}</span>
@@ -85,13 +91,13 @@ const TaskList: React.FC = () => {
             <div className="flex space-x-2">
               {editingId === task.id ? (
                 <>
-                  <button onClick={() => saveEdit(task.id)} className="text-green-500">Save</button>
-                  <button onClick={cancelEdit} className="text-gray-500">Cancel</button>
+                  <button onClick={() => saveEdit(task.id)} className="text-green-500" aria-label={`Save changes for task ${task.text}`}>Save</button>
+                  <button onClick={cancelEdit} className="text-gray-500" aria-label="Cancel editing">Cancel</button>
                 </>
               ) : (
                 <>
-                  <button onClick={() => startEditing(task)} className="text-yellow-500">Edit</button>
-                  <button onClick={() => deleteTask(task.id)} className="text-red-500">Delete</button>
+                  <button onClick={() => startEditing(task)} className="text-yellow-500" aria-label={`Edit task ${task.text}`}>Edit</button>
+                  <button onClick={() => deleteTask(task.id)} className="text-red-500" aria-label={`Delete task ${task.text}`}>Delete</button>
                 </>
               )}
             </div>

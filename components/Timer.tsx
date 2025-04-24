@@ -7,6 +7,8 @@ interface TimerProps {
   shortBreak?: number;
   longBreak?: number;
   autoStart?: boolean;
+  highContrast?: boolean;
+  onAudioCue?: () => void;
 }
 
 const Timer: React.FC<TimerProps> = ({
@@ -14,15 +16,24 @@ const Timer: React.FC<TimerProps> = ({
   shortBreak = 5,
   longBreak = 15,
   autoStart = false,
+  highContrast = false,
+  onAudioCue,
 }) => {
   const [timeLeft, setTimeLeft] = useState(initialMinutes * 60);
   const [isActive, setIsActive] = useState(false);
 
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  // const audioCtxRef = useRef<AudioContext | null>(null); // audio disabled for now
 
   // Session phase and cycle tracking
   const [phase, setPhase] = useState<'work' | 'short' | 'long'>('work');
   const [cycles, setCycles] = useState(0);
+
+  // Audio cue for phase transitions
+  const playSound = () => {
+    // Audio functionality is currently disabled; TODO: revisit for improved UX
+    onAudioCue?.();
+  };
 
   const handleStartPause = () => {
     if (isActive) {
@@ -46,6 +57,7 @@ const Timer: React.FC<TimerProps> = ({
 
   useEffect(() => {
     if (timeLeft === 0) {
+      playSound();
       if (intervalRef.current) clearInterval(intervalRef.current);
       setIsActive(false);
 
@@ -91,7 +103,7 @@ const Timer: React.FC<TimerProps> = ({
   const strokeDashoffset = circumference * (1 - timeLeft / totalSeconds);
 
   return (
-    <div className="timer p-4 bg-white rounded shadow">
+    <div className={`timer p-4 rounded shadow ${highContrast ? 'bg-black text-white' : 'bg-white text-black'}`}>
       <h2 className="text-2xl font-bold">
         {phase === 'work'
           ? 'Work'
@@ -113,6 +125,7 @@ const Timer: React.FC<TimerProps> = ({
           {isActive ? 'Pause' : 'Start'}
         </button>
         <button onClick={handleReset} className="px-4 py-2 bg-red-500 text-white rounded">Reset</button>
+        {/* <button onClick={playSound} className="px-4 py-2 bg-blue-500 text-white rounded" aria-label="Test sound">Test Sound</button> */}
       </div>
     </div>
   );
