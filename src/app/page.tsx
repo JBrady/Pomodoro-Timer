@@ -1,8 +1,15 @@
+"use client";
+import React, { useState } from 'react';
 import Timer from '../../components/Timer';
 import TaskList from '../../components/TaskList';
 import Settings from '../../components/Settings';
 
 export default function Home() {
+  const [workDuration, setWorkDuration] = useState(25);
+  const [shortBreak, setShortBreak] = useState(5);
+  const [longBreak, setLongBreak] = useState(15);
+  const [autoStart, setAutoStart] = useState(false);
+
   return (
     <div className="min-h-screen flex flex-col">
       <header className="bg-white shadow">
@@ -18,9 +25,18 @@ export default function Home() {
         </div>
       </header>
       <main className="container mx-auto p-4 flex-grow grid grid-cols-1 md:grid-cols-2 gap-4">
-        <Timer />
+        <Timer initialMinutes={workDuration} />
         <TaskList />
-        <Settings />
+        <Settings
+          workDuration={workDuration}
+          setWorkDuration={setWorkDuration}
+          shortBreak={shortBreak}
+          setShortBreak={setShortBreak}
+          longBreak={longBreak}
+          setLongBreak={setLongBreak}
+          autoStart={autoStart}
+          setAutoStart={setAutoStart}
+        />
       </main>
       <footer className="bg-gray-100">
         <div className="container mx-auto p-4 text-center text-sm text-gray-500">
